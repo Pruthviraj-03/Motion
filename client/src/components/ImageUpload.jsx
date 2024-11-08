@@ -1,9 +1,14 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ImageUpload = ({ closeModal }) => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleFileClick = () => {
     fileInputRef.current.click();
@@ -23,6 +28,60 @@ const ImageUpload = ({ closeModal }) => {
     setImageUrl(url);
     if (url) {
       setFileName("");
+    }
+  };
+
+  const handleSubmit = async () => {
+    setErrorMessage("");
+    try {
+      setLoading(true);
+      const formData = new FormData();
+
+      // Log the current state
+      console.log("Submitting form...");
+      console.log("File Name:", fileName);
+      console.log("Image URL:", imageUrl);
+
+      if (fileName) {
+        const file = fileInputRef.current.files[0];
+        if (file) {
+          console.log("Appending file:", file);
+          formData.append("image", file);
+        } else {
+          console.error("No file found in file input.");
+        }
+      } else if (imageUrl) {
+        console.log("Appending image URL:", imageUrl);
+        formData.append("imageUrl", imageUrl);
+      } else {
+        setErrorMessage("Please provide either a file or an image URL.");
+        console.error("No file or image URL provided.");
+        return;
+      }
+
+      console.log("Form Data being sent:", formData);
+
+      const response = await axios.post(
+        "http://localhost:8000/api/v2/images/generate-gif",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      console.log("Response from server:", response);
+
+      const { originalImage, gif } = response.data.data;
+      console.log("Received GIF and original image:", originalImage, gif);
+
+      navigate("/output", {
+        state: { originalImage, gif },
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setErrorMessage("An error occurred while uploading the image.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,6 +118,7 @@ const ImageUpload = ({ closeModal }) => {
 
         <input
           type="file"
+          name="image"
           ref={fileInputRef}
           style={{ display: "none" }}
           onChange={handleFileChange}
@@ -66,7 +126,11 @@ const ImageUpload = ({ closeModal }) => {
           disabled={!!imageUrl}
         />
 
-        <div className="login">done</div>
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+        <div className="login" onClick={handleSubmit}>
+          {loading ? "Processing..." : "Done"}
+        </div>
       </div>
     </div>
   );

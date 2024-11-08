@@ -16,7 +16,12 @@ const userSchema = new mongoose.Schema(
     },
     accessToken: { type: String },
     refreshToken: { type: String },
-    downloads: [{ type: Object }],
+    mygifs: [
+      {
+        originalImage: String,
+        gif: String,
+      },
+    ],
   },
   { timestamps: true }
 );
