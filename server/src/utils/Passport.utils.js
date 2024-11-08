@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { User } from "../models/user.model.js";
-import { mailHelper } from "./MailHelper.utils.js";
 import { CookieToken } from "./CookieToken.utils.js";
 import { generateAccessAndRefreshTokens } from "../controllers/user.controller.js";
 import dotenv from "dotenv";
@@ -43,13 +42,6 @@ passport.use(
             refreshToken,
           });
           await user.save();
-
-          await mailHelper({
-            email,
-            subject: "Login At Modazen",
-            message: "You've successfully Login at Modazen!",
-            htmlMessage: "<p>You've successfully Login at Modazen!</p>",
-          });
         }
 
         const tokens = await generateAccessAndRefreshTokens(user);
