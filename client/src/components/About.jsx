@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
@@ -11,7 +12,9 @@ const About = () => {
         Experience real-time GIF generation with just a click – perfect for
         sharing on social media or saving a memorable moment!
       </p>
-      <div className="upload">Get Started</div>
+      <div className="upload">
+        <Link to="/output">Get Started</Link>
+      </div>
     </div>
   );
 };
