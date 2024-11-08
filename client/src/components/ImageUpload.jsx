@@ -66,6 +66,7 @@ const ImageUpload = ({ closeModal }) => {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
         }
       );
 

@@ -5,6 +5,9 @@ const Output = () => {
   const location = useLocation();
   const { originalImage, gif } = location.state || {};
 
+  console.log("Original Image:", originalImage);
+  console.log("Generated GIF:", gif);
+
   return (
     <div className="output">
       <span className="output-title">Your MOTION is ready!</span>
@@ -18,14 +21,20 @@ const Output = () => {
         <div className="image-output">
           <span>Generated GIF:</span>
           <div className="image-output-box">
-            <img src={gif} alt="Generated GIF" />
+            {gif ? (
+              <img src={gif} alt="Generated GIF" />
+            ) : (
+              <p>No GIF available</p>
+            )}
           </div>
         </div>
       </div>
       <div className="download">
-        <a href={gif} download>
-          Download GIF
-        </a>
+        {gif && (
+          <a href={gif} download>
+            Download GIF
+          </a>
+        )}
       </div>
       <p>
         Motion is a seamless web app that turns your still photos into animated,
