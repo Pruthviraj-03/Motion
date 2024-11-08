@@ -1,7 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import ImageUpload from "./ImageUpload";
 
 const About = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="about">
       <span>Bring Your Photos to Life – Generate a GIF in Seconds!</span>
@@ -12,9 +22,11 @@ const About = () => {
         Experience real-time GIF generation with just a click – perfect for
         sharing on social media or saving a memorable moment!
       </p>
-      <div className="upload">
-        <Link to="/output">Get Started</Link>
+      <div className="upload" onClick={openModal}>
+        Get Started
       </div>
+
+      {showModal && <ImageUpload closeModal={closeModal} />}
     </div>
   );
 };
