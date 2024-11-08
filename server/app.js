@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import cors from "cors";
 import dotenv from "dotenv";
+import session from "express-session";
+import passport from "passport";
+import("./src/utils/Passport.utils.js");
 
 // Load environment variables
 dotenv.config({
@@ -32,5 +35,24 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//routes import
+import { router as userRouter } from "./src/routes/user.routes.js";
+
+//routes declaration
+app.use("/api/v1/users", userRouter);
+
+// http://localhost:8000/api/v1/users/google/callback
 
 export { app };
