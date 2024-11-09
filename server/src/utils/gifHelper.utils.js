@@ -64,7 +64,7 @@ const generateGifFromImage = async (imageUrl) => {
     const gifData = await generateGifFromImage(
       "https://segmind-sd-models.s3.amazonaws.com/display_images/liveportrait-input.jpg"
     );
-    console.log(gifData);
+    // console.log(gifData);
   } catch (error) {
     console.error("Error:", error.message);
   }
