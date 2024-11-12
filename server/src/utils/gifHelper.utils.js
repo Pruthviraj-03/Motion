@@ -15,7 +15,6 @@ async function imageUrlToBase64(imageUrl) {
 const api_key = process.env.SEGMIND_API_KEY;
 const url = "https://api.segmind.com/v1/live-portrait";
 
-// Main function to generate the GIF
 const generateGifFromImage = async (imageUrl) => {
   const data = {
     face_image: await imageUrlToBase64(imageUrl),
@@ -41,14 +40,13 @@ const generateGifFromImage = async (imageUrl) => {
       headers: { "x-api-key": api_key },
     });
 
-    // Check if the API returns an error indicating insufficient credits
     if (response.data.error === "Insufficient credits") {
       throw new Error(
         "Insufficient credits. Please add credits to your account."
       );
     }
 
-    return response.data; // Return the GIF data if successful
+    return response.data;
   } catch (error) {
     console.error(
       "Error generating GIF:",
@@ -58,13 +56,11 @@ const generateGifFromImage = async (imageUrl) => {
   }
 };
 
-// Example usage
 (async () => {
   try {
     const gifData = await generateGifFromImage(
       "https://segmind-sd-models.s3.amazonaws.com/display_images/liveportrait-input.jpg"
     );
-    // console.log(gifData);
   } catch (error) {
     console.error("Error:", error.message);
   }

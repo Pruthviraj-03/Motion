@@ -7,15 +7,12 @@ import session from "express-session";
 import passport from "passport";
 import("./src/utils/Passport.utils.js");
 
-// Load environment variables
 dotenv.config({
   path: "./.env",
 });
 
-// Initialize Express app
 const app = express();
 
-// Configure middleware
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -40,11 +37,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//routes import
 import { router as userRouter } from "./src/routes/user.routes.js";
 import { router as imageRouter } from "./src/routes/image.routes.js";
 
-//routes declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v2/images", imageRouter);
 
